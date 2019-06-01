@@ -1,0 +1,33 @@
+<input type="file" id="input" accept="video/*" />
+
+<script>
+  const inputElement = document.getElementById('input');
+  inputElement.addEventListener('change', handleFiles, false);
+  function handleFiles() {
+    const fileList = this.files;
+    for (let i = 0; i < fileList.length; i++) {
+      let file = fileList[i];
+      //type of the file!!!
+      const content_type = file.type;
+
+      // Create new FileReader as a variable
+      const reader = new FileReader();
+
+      // Onload Function will run after video has loaded
+      reader.onload = function(file) {
+        const fileContent = file.target.result;
+        fetch('/save', {
+          method: 'POST',
+          body: fileContent,
+          headers: new Headers({ 'content-type': content_type })
+        })
+          .then(res => res.text())
+          .then(res => console.log(res))
+          .catch(e => console.log(e));
+      };
+
+      // Get the selected video from Dialog
+      reader.readAsArrayBuffer(file);
+    }
+  }
+</script>

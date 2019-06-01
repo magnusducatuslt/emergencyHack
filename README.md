@@ -1,0 +1,1 @@
+just type "npm start"
